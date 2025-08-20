@@ -1,0 +1,801 @@
+// Download CV Function
+       
+            
+            <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahmed Megahed - Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iNCIgZmlsbD0iIzAwZGM4MiIvPgo8L3N2Zz4K') 12 12, auto;
+        }
+
+        :root {
+            --bg-color: #0a0a0a;
+            --text-color: #ffffff;
+            --accent-color: #00dc82;
+            --secondary-color: #1a1a1a;
+            --gradient: linear-gradient(135deg, #00dc82, #36d47c);
+            --pyramid-color: #c9aa71;
+        }
+
+        [data-theme="light"] {
+            --bg-color: #ffffff;
+            --text-color: #0a0a0a;
+            --secondary-color: #f5f5f5;
+            --pyramid-color: #d4af37;
+        }
+
+        body {
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease;
+        }
+
+        .cursor.hover {
+            transform: scale(2);
+            background: rgba(0, 220, 130, 0.3);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="light"] nav {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .cv-button {
+            background: var(--accent-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-left: 1rem;
+        }
+
+        .cv-button:hover {
+            background: transparent;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        /* 3D Pyramids Background */
+        .pyramids-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .pyramid {
+            position: absolute;
+            width: 0;
+            height: 0;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .pyramid:nth-child(1) {
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 80px solid var(--pyramid-color);
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .pyramid:nth-child(2) {
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            border-bottom: 60px solid var(--pyramid-color);
+            top: 60%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+
+        .pyramid:nth-child(3) {
+            border-left: 40px solid transparent;
+            border-right: 40px solid transparent;
+            border-bottom: 70px solid var(--pyramid-color);
+            bottom: 20%;
+            left: 60%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Sections */
+        section {
+            min-height: 100vh;
+            padding: 8rem 2rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 10px rgba(0, 220, 130, 0.3)); }
+            to { filter: drop-shadow(0 0 30px rgba(0, 220, 130, 0.6)); }
+        }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .cta-button {
+            background: var(--gradient);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 220, 130, 0.4);
+        }
+
+        /* About Section */
+        .about {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-image {
+            text-align: center;
+        }
+
+        .about-image img {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--accent-color);
+            box-shadow: 0 0 50px rgba(0, 220, 130, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .about-image img:hover {
+            transform: scale(1.05);
+        }
+
+        .about-text h2 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: var(--accent-color);
+        }
+
+        .about-text p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Skills Section */
+        .skills {
+            text-align: center;
+        }
+
+        .skills h2 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: var(--accent-color);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .skill-card {
+            background: var(--secondary-color);
+            padding: 2rem;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(0, 220, 130, 0.2);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-color);
+        }
+
+        .skill-card h3 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Projects Section */
+        .projects {
+            text-align: center;
+        }
+
+        .projects h2 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: var(--accent-color);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background: var(--secondary-color);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(0, 220, 130, 0.2);
+        }
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .project-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0, 220, 130, 0.2);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-color);
+            font-size: 3rem;
+            overflow: hidden;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .project-content {
+            padding: 2rem;
+        }
+
+        .project-content h3 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .project-link {
+            background: var(--accent-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .project-link:hover {
+            transform: scale(1.05);
+        }
+
+        /* Contact Section */
+        .contact {
+            text-align: center;
+        }
+
+        .contact h2 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: var(--accent-color);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .contact-card {
+            background: var(--secondary-color);
+            padding: 2rem;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(0, 220, 130, 0.2);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+        }
+
+        .contact-card h3 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .contact-card a {
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid rgba(0, 220, 130, 0.2);
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .about {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .about-image img {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    
+    <!-- Pyramids Background -->
+    <div class="pyramids-container">
+        <div class="pyramid"></div>
+        <div class="pyramid"></div>
+        <div class="pyramid"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">Ahmed Megahed</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div style="display: flex; align-items: center;">
+                <a href="#" class="cv-button" onclick="downloadCV()"> Download CV</a>
+                <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Ahmed Megahed</h1>
+            <p>Front-End Developer & Data Analysis Enthusiast</p>
+            <a href="#about" class="cta-button">Get To Know Me</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="about-image">
+            <img src="me.jpg" alt="Ahmed Megahed" />
+        </div>
+        <div class="about-text">
+            <h2>About Me</h2>
+            <p>I'm a passionate Front-End Web Developer from Menouf, Egypt, currently pursuing my Bachelor's degree in Computer Science and Artificial Intelligence at Sadat City University.</p>
+            <p>With a strong foundation in modern web technologies and a growing expertise in Data Analysis, I love creating responsive, interactive user interfaces that provide exceptional user experiences.</p>
+            <p>I'm always eager to learn new technologies and take on challenging projects that push my skills to the next level.</p>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <h2>Technical Skills</h2>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <h3>Web Development</h3>
+                <p>HTML5, CSS3, JavaScript, React, Bootstrap</p>
+            </div>
+            <div class="skill-card">
+                <h3>Data Analysis</h3>
+                <p>Python, Pandas, NumPy, Matplotlib, SQL</p>
+            </div>
+            <div class="skill-card">
+                <h3>Programming</h3>
+                <p>C++, PHP, Python, JavaScript</p>
+            </div>
+            <div class="skill-card">
+                <h3>Database Systems</h3>
+                <p>SQL Server, Microsoft Access</p>
+            </div>
+            <div class="skill-card">
+                <h3>Version Control</h3>
+                <p>Git, GitHub</p>
+            </div>
+            <div class="skill-card">
+                <h3>Tools & Others</h3>
+                <p>Excel, Power BI, Streamlit</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <h2>Featured Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="Screenshot 2025-08-17 223316.png " alt="Sales Dashboard"  >
+                </div>
+                <div class="project-content">
+                    <h3>Sales Dashboard</h3>
+                    <p>Interactive sales analytics dashboard with comprehensive data visualization, regional analysis, and performance tracking features using advanced charts and KPIs.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/ahmedmegahed0" class="project-link">GitHub</a>
+                        <a href="#" class="project-link">Live Demo</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="Screenshot 2025-08-17 223426.png" alt="Leon Website">
+                </div>
+                <div class="project-content">
+                    <h3>Leon Website Template</h3>
+                    <p>Creative and minimal agency website template featuring responsive design, modern aesthetics, beautiful mountain imagery, and smooth user experience.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/ahmedmegahed0" class="project-link">GitHub</a>
+                        <a href="https://ahmedmegahed0.github.io/Kerri-Bootstrap/" class="project-link">Live Demo</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="Screenshot 2025-08-20 141913.png" alt="Pharmacy Management System">
+                </div>
+                <div class="project-content">
+                    <h3>Pharmacy Management System</h3>
+                    <p>Comprehensive pharmacy management system with inventory control, CRUD operations, search functionality, and user-friendly interface for medication tracking and management.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/ahmedmegahed0" class="project-link">GitHub</a>
+                        <a href="#" class="project-link">Live Demo</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <h2>Get In Touch</h2>
+        <p>I'm always open to discussing new opportunities and exciting projects!</p>
+        <div class="contact-grid">
+            <div class="contact-card">
+                <h3>📧 Email</h3>
+                <a href="mailto:ahmedmegahed580@gmail.com">ahmedmegahed580@gmail.com</a>
+            </div>
+            <div class="contact-card">
+                <h3>📱 Phone</h3>
+                <a href="tel:+201067688524">+20 106 768 8524</a>
+            </div>
+            <div class="contact-card">
+                <h3>💼 LinkedIn</h3>
+                <a href="https://www.linkedin.com/in/ahmed-megahed" target="_blank">ahmed-megahed</a>
+            </div>
+            <div class="contact-card">
+                <h3>💻 GitHub</h3>
+                <a href="https://github.com/ahmedmegahed0" target="_blank">ahmedmegahed0</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Ahmed Megahed. Made with ❤️ in Egypt</p>
+    </footer>
+
+    <script>
+        // Download CV Function
+        function downloadCV() {
+            // CV content based on your provided data
+            const cvContent = `
+Ahmed Mohamed Megahed
+Menouf, Menoufia, Egypt | +20 1067688524
+ahmedmegahed580@gmail.com | https://www.linkedin.com/in/ahmed-megahed
+
+PROFILE
+Front-End Web Developer with a strong foundation in HTML, CSS, JavaScript, and basic React. Passionate about building responsive, interactive user interfaces. Currently expanding skillset in Data Analysis using Python, Excel, and SQL.
+
+SKILLS
+Web Development: HTML, CSS, JavaScript, Bootstrap, React (Basic)
+Version Control: Git, GitHub
+Data Analysis: Python (Pandas, NumPy, Matplotlib), Excel, SQL
+Programming Languages: C++, JavaScript, PHP, Python
+Database Systems: SQL Server, Microsoft Access
+
+EDUCATION
+Sadat City University – College of Computer Science and Artificial Intelligence
+Bachelor's Degree (Expected 2026)
+GPA: B+
+Duration: 2022 – 2026
+
+PROJECTS
+Search Engine Web App (April 2025)
+Technologies: Python, Streamlit, Pandas
+Developed a text search engine with multiple search methods and a clean, interactive UI using Streamlit. Handled text data efficiently with Pandas.
+
+Library & Bank Database Systems (April 2025)
+Technologies: Microsoft Access
+Built two fully functional database systems for a Library and a Bank. Included tables, relationships, queries, forms, and reports.
+
+Responsive Website (December 2024)
+Technologies: Bootstrap, HTML, CSS
+Designed and developed a fully responsive website using Bootstrap, focusing on mobile-first design, layout grids, and custom styling.
+
+Static Website Project (December 2024)
+Technologies: HTML, CSS
+Created a structured, static website using Flexbox and positioning techniques to demonstrate layout proficiency.
+
+INTERNSHIP
+Frontend Development Internship – MasarWeb Company
+Faculty-Based Internship Program in Collaboration with MasarWeb
+January 2024
+Gained hands-on experience in frontend web development using HTML, CSS, and JavaScript. Worked on real-life user interface designs and implemented responsive layouts under professional guidance.
+
+Python Programming Internship – Summer Training Program
+Organized by Sadat City University
+Summer 2025
+Completed a structured training program focused on Python fundamentals, data handling, and problem-solving. Built small applications and scripts as part of practical exercises using Pandas and core Python tools.
+
+CERTIFICATES
+SQL Fundamentals Track – DataCamp
+Issued by DataCamp – June 2025
+Completed a comprehensive track covering SQL basics, filtering, joins, subqueries, aggregations, and advanced query techniques.
+
+Data Analysis Program – Digital Egypt Pioneers Initiative (Ongoing since June 2025)
+Currently enrolled in a professional data analysis program provided by the Digital Egypt Pioneers (Ro2ad Misr Al-Raqameya) initiative. Topics covered include data wrangling, exploratory data analysis, data visualization, and statistical analysis using tools such as Excel, SQL, Power BI, and Python.
+
+SOFT SKILLS
+• Problem Solving
+• Teamwork  
+• Time Management
+• Communication
+
+LANGUAGES
+• Arabic: Native
+• English: Very Good
+            `.trim();
+            
+            // Create and download the CV file
+            const element = document.createElement('a');
+            const file = new Blob([cvContent], {type: 'text/plain'});
+            element.href = URL.createObjectURL(file);
+            element.download = 'Ahmed_Megahed_CV.txt';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+        const cursor = document.querySelector('.cursor');
+        const hoverElements = document.querySelectorAll('a, button, .project-card, .skill-card, .contact-card');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        hoverElements.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                cursor.classList.add('hover');
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                cursor.classList.remove('hover');
+            });
+        });
+
+        // Theme Toggle
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.querySelector('.theme-toggle');
+            
+            if (body.getAttribute('data-theme') === 'light') {
+                body.removeAttribute('data-theme');
+                themeToggle.textContent = '🌙';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                themeToggle.textContent = '☀️';
+            }
+        }
+
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(50px)';
+            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(section);
+        });
+
+        // Initial animation for hero section
+        setTimeout(() => {
+            document.querySelector('#home').style.opacity = '1';
+            document.querySelector('#home').style.transform = 'translateY(0)';
+        }, 300);
+    </script>
+</body>
+</html>
